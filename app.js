@@ -1,48 +1,63 @@
 var http = require("http");
 var fs = require('fs');
 var cheerio = require('cheerio');
-var url = "xxx";
-var data = "";
-var list = [];
+var MongoClient = require('mongodb').MongoClient;
+var async = require('async');
 
-var baseOptions = {
-	host: 'xxx',
-	path: 'xxx'
-};
+var dbUrl = 'mongodb://192.168.1.222:27017/resume';
 
-http.get(baseOptions, function(response) {
-	var stack = '';
-	response.on('data', function(chunk) {
-		stack += chunk;
+var nameArr = [];
+var baiduUrlArr = [];
+var urlArr = [];
+
+MongoClient.connect(dbUrl, function(err, db) {
+	//get school name
+	findSchool(db, function() {
+		searchSchool();
 	});
-
-	response.on('end', function() {
-		var $ = cheerio.load(stack);
-		var stackList = $('.hot_pos_l .mb10 a');
-		stackList.each(function(index, el) {
-			list.push($(el).attr('href'));
+});
+var findSchool = function(db, cb) {
+	var collection = db.collection('universities');
+	collection.find({country_id: 'CHS'}).toArray(function(err, results) {
+		if (err) {
+			console.log(err);
+		}
+		results.forEach(function(val) {
+			nameArr.push(val.name);
 		});
-		handleFn(list)
+		cb();
 	});
-})
-var handleFn = function(data) {
-	var listLength = data.length;
-	for (var i = 0; i < listLength; i++) {
-		var currentUrl =  data[i];
-		http.get(currentUrl, function(response) {
+
+}
+var searchSchool = function() {
+	//search url
+	var i = 0;
+	async.each(['复旦大学','华东师范大学'], function(val, callback) {
+		http.get('http://www.baidu.com/s?wd=' + val + '就业网', function(response) {
 			var stack = '';
 			response.on('data', function(chunk) {
 				stack += chunk;
 			});
 
-			response.on('end', function() {
+			response.on('end', function(err) {
+				if (err) {
+					console.log("err" + err);
+				}
 				var $ = cheerio.load(stack);
-				var aaa = $('.job_detail dt h1 div').text();;
-				console.log(aaa);
+				var baiduUrl = $('#1 .t a').attr('href');
+				baiduUrlArr.push(baiduUrl)
+				callback();
 			});
-		}).on('error', function(e) {
-			console.log(e.message);
 		})
-	}
-
+	}, function(err) {
+		getRealUrl(baiduUrlArr);
+	})
+}
+var getRealUrl = function(baiduUrlArr) {
+	console.log(baiduUrlArr);
+	// async.each(baiduUrlArr, function(val, callback) {
+	// 	http.get(val, function(res) {
+	// 		console.log(JSON.stringify(res.headers));
+	// 	})
+	// })
 }
