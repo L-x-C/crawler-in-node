@@ -9,11 +9,10 @@ var dbUrl = 'mongodb://192.168.1.222:27017/resume';
 var nameArr = [];
 var baiduUrlArr = [];
 var urlArr = [];
-
 MongoClient.connect(dbUrl, function(err, db) {
 	//get school name
 	findSchool(db, function() {
-		searchSchool();
+		searchSchool(db);
 	});
 });
 var findSchool = function(db, cb) {
@@ -25,14 +24,14 @@ var findSchool = function(db, cb) {
 		results.forEach(function(val) {
 			nameArr.push(val.name);
 		});
-		cb();
+		cb(db);
 	});
 
 }
-var searchSchool = function() {
+var searchSchool = function(db) {
 	//search url
 	var i = 0;
-	async.each(['复旦大学','华东师范大学'], function(val, callback) {
+	async.each(['东华大学','清华大学'], function(val, callback) {
 		http.get('http://www.baidu.com/s?wd=' + val + '就业网', function(response) {
 			var stack = '';
 			response.on('data', function(chunk) {
@@ -41,7 +40,7 @@ var searchSchool = function() {
 
 			response.on('end', function(err) {
 				if (err) {
-					console.log("err" + err);
+					console.log(err);
 				}
 				var $ = cheerio.load(stack);
 				var baiduUrl = $('#1 .t a').attr('href');
@@ -49,15 +48,17 @@ var searchSchool = function() {
 				callback();
 			});
 		})
-	}, function(err) {
+	}, function() {
 		getRealUrl(baiduUrlArr);
 	})
 }
 var getRealUrl = function(baiduUrlArr) {
-	console.log(baiduUrlArr);
-	// async.each(baiduUrlArr, function(val, callback) {
-	// 	http.get(val, function(res) {
-	// 		console.log(JSON.stringify(res.headers));
-	// 	})
-	// })
+	async.each(baiduUrlArr, function(val, callback) {
+		http.get(val, function(res) {
+			urlArr.push(res.headers.location);
+			callback();
+		})
+	}, function(){
+		console.log(urlArr);
+	})
 }
