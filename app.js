@@ -3,11 +3,9 @@ var fs = require('fs');
 var cheerio = require('cheerio');
 var MongoClient = require('mongodb').MongoClient;
 var async = require('async');
-
-var dbUrl = 'mongodb://localhost/resume';
-
+var dbUrl = 'mongodb://192.168.1.222/resume';
+http.globalAgent.maxSockets = 4000; 
 var nameArr = []; //all the name of universities
-
 var DB,
 	collection;
 var proxyArr = [];
@@ -41,7 +39,7 @@ var findSchool = function(db, cb) {
 }
 var searchSchool = function() {
 	//search url
-	async.mapSeries(nameArr, function(val, callback) {
+	async.eachSeries(nameArr, function(val, callback) {
 		http.get('http://www.baidu.com/s?wd=' + val + '就业网', function(response) {
 			var stack = '';
 			response.on('data', function(chunk) {
@@ -53,11 +51,11 @@ var searchSchool = function() {
 					console.log(err);
 				}
 				var $ = cheerio.load(stack);
-				var baiduUrl = $('#1 .t').find('a').eq(0).attr('href');
+				var baiduUrl = $('#1 .t').find('a').eq(0).attr('href') ? $('#1 .t').find('a').eq(0).attr('href') : $('#2 .t').find('a').eq(0).attr('href');
 				console.log('a' + val + nameArr.indexOf(val));
+
 				http.get(baiduUrl, function(res) {
 					console.log('b' + val + nameArr.indexOf(val));
-
 					collection.update({
 						name: val
 					}, {
