@@ -3,7 +3,7 @@ var fs = require('fs');
 var cheerio = require('cheerio');
 var MongoClient = require('mongodb').MongoClient;
 var async = require('async');
-var dbUrl = 'mongodb://192.168.1.222/resume';
+var dbUrl = 'mongodb://localhost/resume';
 http.globalAgent.maxSockets = 4000; 
 var nameArr = []; //all the name of universities
 var DB,
@@ -70,5 +70,6 @@ var searchSchool = function() {
 		})
 	}, function() {
 		console.log('done');
+		DB.close();
 	})
 }
