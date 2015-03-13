@@ -49,7 +49,7 @@ var findJobUrl = function(db, cb) {
 };
 
 var searchJobInfo = function() {
-	async.eachSeries(urlArr.slice(3259), function(val, callback) {
+	async.eachSeries(urlArr, function(val, callback) {
 		if (val) {
 			http.get(val, function(response) {
 				var stack = '';
@@ -124,7 +124,7 @@ var searchJobInfo = function() {
 										tel: telArr,
 										email: emailArr
 									};
-									fs.appendFile('data.json', JSON.stringify(saveObj) + '\n');
+									fs.appendFile('data.json', JSON.stringify(saveObj) + '$\n');
 								}
 								innerCallback();
 							});

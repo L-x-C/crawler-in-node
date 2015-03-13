@@ -67,6 +67,8 @@ var searchSchool = function() {
 					});
 				})
 			});
+		}).on('error', function(err) {
+			callback();
 		})
 	}, function() {
 		console.log('done');
