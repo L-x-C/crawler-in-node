@@ -4,7 +4,7 @@ var cheerio = require('cheerio');
 var MongoClient = require('mongodb').MongoClient;
 var async = require('async');
 var dbUrl = 'mongodb://localhost/resume';
-http.globalAgent.maxSockets = 4000; 
+http.globalAgent.maxSockets = 4000;
 var nameArr = []; //all the name of universities
 var DB,
 	collection;

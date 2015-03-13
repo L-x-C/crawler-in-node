@@ -4,7 +4,7 @@ var cheerio = require('cheerio');
 var MongoClient = require('mongodb').MongoClient;
 var async = require('async');
 var dbUrl = 'mongodb://localhost/resume';
-http.globalAgent.maxSockets = 10000; 
+http.globalAgent.maxSockets = 10000;
 var urlArr = []; //all the name of universities
 var DB,
 	collection;
@@ -12,15 +12,16 @@ var proxyArr = [];
 var index;
 
 Array.prototype.unique = function() {
-    var res = [], hash = {};
-    for(var i=0, elem; (elem = this[i]) != null; i++)  {
-        if (!hash[elem])
-        {
-            res.push(elem);
-            hash[elem] = true;
-        }
-    }
-    return res;
+	var res = [],
+		hash = {};
+	for (var i = 0, elem;
+		(elem = this[i]) != null; i++) {
+		if (!hash[elem]) {
+			res.push(elem);
+			hash[elem] = true;
+		}
+	}
+	return res;
 };
 
 MongoClient.connect(dbUrl, function(err, db) {
@@ -70,7 +71,7 @@ var searchJobInfo = function() {
 						subUrlList.push(url);
 					});
 					//filter url
-					subUrlList = subUrlList.filter(function(element,pos) {
+					subUrlList = subUrlList.filter(function(element, pos) {
 						if (element) {
 							return element.charAt(0) === 'h' || element.charAt(0) === '/';
 						}
@@ -90,10 +91,11 @@ var searchJobInfo = function() {
 					//find tel or email 
 					// async.eachSeries([filterSubUrlList[14]], function(url, innerCallback) {
 					async.eachSeries(filterSubUrlList, function(url, innerCallback) {
-						var request_timer = null, req = null;
+						var request_timer = null,
+							req = null;
 						// 请求5秒超时
 						request_timer = setTimeout(function() {
-						    innerCallback();
+							innerCallback();
 						}, 5000);
 
 						req = http.get(url, function(res) {
@@ -122,7 +124,7 @@ var searchJobInfo = function() {
 										tel: telArr,
 										email: emailArr
 									};
-									fs.appendFile('data.json', JSON.stringify(saveObj)+'\n');
+									fs.appendFile('data.json', JSON.stringify(saveObj) + '\n');
 								}
 								innerCallback();
 							});
@@ -139,7 +141,7 @@ var searchJobInfo = function() {
 			});
 		} else {
 			callback();
-		} 
+		}
 
 	}, function() {
 		console.log('done');
