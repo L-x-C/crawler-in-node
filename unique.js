@@ -11,8 +11,22 @@ Array.prototype.unique = function() {
     }
     return res;
 };
+Array.prototype.superUnique = function() {
+    var res = [], hash = {};
+    for(var i = 0; i < this.length - 1; i++)  {
+        var elem = this[i];
+        var compareEle = JSON.parse(this[i]).tel.toString() + JSON.parse(this[i]).email.toString();
+        if (!hash[compareEle])
+        {
+            res.push(elem);
+            hash[compareEle] = true;
+        }
+    }
+    return res;
+};
 var targetArr = [];
 fs.readFile('data.json', 'utf-8', function(err,data) {
-	targetArr = data.split(';').unique();
-    fs.writeFile('target.json', targetArr);
+	targetArr = data.split('$').superUnique();
+    fs.writeFile('goal.json', targetArr);
 })
+
