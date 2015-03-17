@@ -57,7 +57,7 @@ var findJobUrl = function(db, cb) {
 };
 
 var searchJobInfo = function() {
-	async.eachSeries(urlArr.slice(0,1282), function(val, callback) {
+	async.eachSeries(urlArr.slice(2565,3846), function(val, callback) {
 		if (val && val !== 'http://www.yjbys.com') {
 			http.get(val, function(response) {
 				var stack = '';

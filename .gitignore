@@ -53,6 +53,7 @@ build/Release
 node_modules
 bower_components
 uploads
+data_backup
 
 ### JetBrains template
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
@@ -85,7 +86,8 @@ uploads
 ## File-based project format:
 *.ipr
 *.iws
-
+*.json
+*.xsl
 ## Plugin-specific files:
 
 # IntelliJ

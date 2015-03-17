@@ -17,7 +17,7 @@ Array.prototype.superUnique = function() {
 		hash = {};
 	for (var i = 0; i < this.length - 1; i++) {
 		var elem = this[i];
-		var compareEle = JSON.parse(this[i]).tel.toString() + JSON.parse(this[i]).email.toString();
+		var compareEle = JSON.parse(this[i]).tel.toString() + JSON.parse(this[i]).email.toString() + JSON.parse(this[i]).jobDes.toString();
 		if (!hash[compareEle]) {
 			res.push(elem);
 			hash[compareEle] = true;
@@ -26,7 +26,7 @@ Array.prototype.superUnique = function() {
 	return res;
 };
 var targetArr = [];
-fs.readFile('data.json', 'utf-8', function(err, data) {
-	targetArr = data.split('$').superUnique();
-	fs.writeFile('goal.json', targetArr);
+fs.readFile('zlzp.json', 'utf-8', function(err, data) {
+	targetArr = data.split('$%').unique();
+	fs.writeFile('zlzp_goal.json', targetArr);
 })
