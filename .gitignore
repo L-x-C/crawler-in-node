@@ -88,6 +88,8 @@ data_backup
 *.iws
 *.json
 *.xsl
+*.xls
+*.xlsx
 ## Plugin-specific files:
 
 # IntelliJ

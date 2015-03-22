@@ -133,6 +133,9 @@ var searchJobInfo = function() {
 								var education = $('.terminal-ul li').eq(5).find('strong').text() || '';
 								var jobType = $('.terminal-ul li').eq(7).find('strong').text() || '';
 								var jobDes = $('.tab-inner-cont div').text() || '';
+								var jobTitle = $('.inner-left h1').text() || '';
+								var companyName = $('.company-name-t a').text() || '';
+								var companyAddress = $('.terminal-company li').last().find('strong').text() || '';
 
 								if (telArr.length !== 0 || emailArr.length !== 0) {
 									var saveObj = {
@@ -142,7 +145,10 @@ var searchJobInfo = function() {
 										address: address,
 										education: education,
 										jobType: jobType,
-										jobDes: jobDes
+										jobDes: jobDes,
+										jobTitle: jobTitle,
+										companyName: companyName,
+										companyAddress: companyAddress
 									};
 									fs.appendFile('zlzp2.json', JSON.stringify(saveObj) + '$%\n');
 								}
